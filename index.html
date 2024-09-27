@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registo de Apostas Futurista</title>
+    <style>
+        /* Fonte futurista do Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background-color: #121212; /* Fundo escuro */
+            color: #00FFCC; /* Cor Neon */
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        h1 {
+            color: #00FFCC;
+            text-align: center;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 36px;
+        }
+
+        .container {
+            background: rgba(34, 34, 34, 0.8); /* Fundo semi-transparente */
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37); /* Sombra suave */
+            border-radius: 12px;
+            padding: 20px;
+            max-width: 900px;
+            width: 100%;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.18); /* Linha translúcida */
+        }
+
+        label, .stat-item {
+            font-weight: bold;
+            color: #00FFCC;
+        }
+
+        input, select, button {
+            padding: 10px;
+            margin: 10px 0;
+            width: 100%;
+            border-radius: 10px;
+            border: none;
+            font-size: 16px;
+            background: rgba(34, 34, 34, 0.8);
+            color: #00FFCC;
+            box-shadow: 0 4px 15px rgba(0, 255, 204, 0.3);
+            outline: none;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        input:focus, button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 30px rgba(0, 255, 204, 0.6);
+        }
+
+        button {
+            background-color: #00FFCC;
+            color: #121212;
+            cursor: pointer;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            background-color: #00e6b8;
+        }
+
+        .table-container, .chart-container {
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        th {
+            background-color: #00FFCC;
+            color: #121212;
+            text-transform: uppercase;
+        }
+
+        td, th {
+            padding: 10px;
+            text-align: center;
+        }
+
+        /* Cores de vitória e derrota */
+        .bet-win {
+            background-color: rgba(0, 255, 102, 0.2); /* Verde Neon */
+        }
+
+        .bet-loss {
+            background-color: rgba(255, 0, 102, 0.2); /* Vermelho Neon */
+        }
+
+        .delete-btn, .result-btn {
+            padding: 5px 8px;
+            font-size: 12px;
+            margin-right: 5px;
+            border-radius: 6px;
+        }
+
+        .delete-btn {
+            background-color: rgba(255, 0, 102, 0.7); /* Vermelho Neon */
+            color: #fff;
+        }
+
+        .result-btn {
+            background-color: rgba(0, 255, 102, 0.7); /* Verde Neon */
+            color: #121212;
+        }
+
+        .result-btn.loss {
+            background-color: rgba(255, 0, 102, 0.7); /* Vermelho Neon */
+        }
+
+        .chart-container {
+            margin-top: 30px;
+        }
+
+        .stat-container {
+            background-color: rgba(34, 34, 34, 0.8);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        /* Estilização da tabela de estatísticas */
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .stats-table th, .stats-table td {
+            padding: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            color: #00FFCC;
+        }
+
+        .stats-table th {
+            background-color: rgba(0, 255, 204, 0.3);
+            color: #121212;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Registo de Apostas Futurista</h1>
+
+    <div class="container">
+        <div class="form-container">
+            <h3>Adicionar Aposta</h3>
+            <form id="betForm">
+                <label for="betValue">Valor Apostado (€):</label>
+                <input type="number" id="betValue" step="0.01" placeholder="Ex: 50" required>
+                
+                <label for="odd">Odd:</label>
+                <input type="number" id="odd" step="0.01" placeholder="Ex: 2.50" required>
+
+                <button type="submit">Adicionar Aposta</button>
+            </form>
+        </div>
+
+        <div class="table-container">
+            <h3>Histórico de Apostas</h3>
+            <table id="betsTable">
+                <thead>
+                    <tr>
+                        <th>Valor Apostado (€)</th>
+                        <th>Odd</th>
+                        <th>Possíveis Ganhos (€)</th>
+                        <th>Resultado</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Apostas aqui -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="container chart-container">
+        <h3>Evolução do Saldo</h3>
+        <canvas id="balanceChart"></canvas>
+    </div>
+
+    <div class="stat-container">
+        <h3>Estatísticas</h3>
+        <div class="stat-item">
+            <span>Total Apostado:</span> <span id="totalBet">0.00€</span>
+        </div>
+        <div class="stat-item">
+            <span>Total Ganho:</span> <span id="totalWon">0.00€</span>
+        </div>
+        <div class="stat-item">
+            <span>Total Perdido:</span> <span id="totalLost">0.00€</span>
+        </div>
+        <div class="stat-item">
+            <span>Balanço (Ganho - Apostado):</span> <span id="totalBalance">0.00€</span>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const betForm = document.getElementById('betForm');
+        const betsTable = document.querySelector('#betsTable tbody');
+        const balanceChart = document.getElementById('balanceChart').getContext('2d');
+
+        let balanceData = [0];  // Inicialmente o saldo é 0
+        let chartLabels = ['Início'];  // Rótulos do gráfico
+        let bets = [];  // Array para armazenar as apostas
+
+        // Estatísticas
+        let totalBet = 0;
+        let totalWon = 0;
+        let totalLost = 0;
+        let totalBalance = 0; // Ganho - Apostado
+
+        const myChart = new Chart(balanceChart, {
+            type: 'line',
+            data: {
+                labels: chartLabels,
+                datasets: [{
+                    label: 'Saldo (€)',
+                    data: balanceData,
+                    backgroundColor: 'rgba(0, 255, 204, 0.2)',
+                    borderColor: 'rgba(0, 255, 204, 1)',
+                    borderWidth: 2,
+                    fill: true,
+                    pointBorderWidth: 4,
+                    pointHoverRadius: 6,
+                    tension: 0.3 // Suaviza a linha
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: "rgba(255, 255, 255, 0.1)"
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: "rgba(255, 255, 255, 0.1)"
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#00FFCC'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Função para adicionar aposta à tabela e calcular os possíveis ganhos
+        betForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const betValue = parseFloat(document.getElementById('betValue').value);
+            const odd = parseFloat(document.getElementById('odd').value);
+            const possibleWin = (betValue * odd).toFixed(2);
+            
+            const newBet = {
+                betValue: betValue,
+                odd: odd,
+                possibleWin: possibleWin,
+                result: null,
+                resultChanged: false
+            };
+
+            bets.push(newBet);
+            totalBet += betValue;
+
+            refreshTable();
+            updateStats();
+            updateBalance(bets.length - 1, 0);
+            betForm.reset();
+        });
+
+        function addBetToTable(bet, index) {
+            const row = betsTable.insertRow();
+
+            row.insertCell(0).textContent = bet.betValue.toFixed(2);
+            row.insertCell(1).textContent = bet.odd.toFixed(2);
+            row.insertCell(2).textContent = bet.possibleWin;
+
+            const resultCell = row.insertCell(3);
+            resultCell.textContent = bet.result ? bet.result : 'Pendente';
+
+            const actionsCell = row.insertCell(4);
+            const actionDiv = document.createElement('div');
+            actionDiv.classList.add('action-buttons');
+
+            const winButton = document.createElement('button');
+            winButton.textContent = 'Vitória';
+            winButton.classList.add('result-btn');
+            winButton.onclick = () => setResult(index, 'win');
+            actionDiv.appendChild(winButton);
+
+            const lossButton = document.createElement('button');
+            lossButton.textContent = 'Derrota';
+            lossButton.classList.add('result-btn', 'loss');
+            lossButton.onclick = () => setResult(index, 'loss');
+            actionDiv.appendChild(lossButton);
+
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Apagar';
+            deleteButton.classList.add('delete-btn');
+            deleteButton.onclick = () => deleteBet(index);
+            actionDiv.appendChild(deleteButton);
+
+            actionsCell.appendChild(actionDiv);
+
+            if (bet.result === 'Vitória') {
+                row.classList.add('bet-win');
+            } else if (bet.result === 'Derrota') {
+                row.classList.add('bet-loss');
+            }
+        }
+
+        function setResult(index, result) {
+            let bet = bets[index];
+
+            if (bet.resultChanged) {
+                if (bet.result === 'Vitória') {
+                    totalWon -= parseFloat(bet.possibleWin);
+                } else if (bet.result === 'Derrota') {
+                    totalLost -= bet.betValue;
+                }
+            }
+
+            bet.result = result === 'win' ? 'Vitória' : 'Derrota';
+            bet.resultChanged = true;
+
+            if (result === 'win') {
+                totalWon += parseFloat(bet.possibleWin);
+                updateBalance(index, bet.possibleWin - bet.betValue);
+            } else {
+                totalLost += bet.betValue;
+                updateBalance(index, -bet.betValue);
+            }
+
+            updateStats();
+            refreshTable();
+        }
+
+        function deleteBet(index) {
+            let bet = bets[index];
+
+            totalBet -= bet.betValue;
+            if (bet.result === 'Vitória') {
+                totalWon -= parseFloat(bet.possibleWin);
+                updateBalance(index, -(bet.possibleWin - bet.betValue));
+            } else if (bet.result === 'Derrota') {
+                totalLost -= bet.betValue;
+                updateBalance(index, bet.betValue);
+            }
+
+            bets.splice(index, 1);
+            refreshTable();
+            updateStats();
+        }
+
+        function updateBalance(index, amount) {
+            balanceData[index + 1] = balanceData[index] + amount;
+
+            chartLabels.push(`Aposta ${index + 1}`);
+            myChart.update();
+        }
+
+        function updateStats() {
+            totalBalance = totalWon - totalBet; // Balanço entre ganho e apostado
+
+            document.getElementById('totalBet').textContent = totalBet.toFixed(2) + '€';
+            document.getElementById('totalWon').textContent = totalWon.toFixed(2) + '€';
+            document.getElementById('totalLost').textContent = totalLost.toFixed(2) + '€';
+            document.getElementById('totalBalance').textContent = totalBalance.toFixed(2) + '€';
+        }
+
+        function refreshTable() {
+            betsTable.innerHTML = '';
+            bets.forEach((bet, index) => addBetToTable(bet, index));
+        }
+    </script>
+</body>
+</html>
